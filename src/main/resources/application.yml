@@ -1,0 +1,17 @@
+spring:
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+  resources:
+    static-locations: classpath:/
+  profiles:
+    active: dev
+
+config:
+  salt: my_blog
+  admin: admin
+  defaultUser :
+    username: admin
+    password: test1234
+    nickname: 管理员
+

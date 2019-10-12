@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>分类</title>
+    <link href="https://cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/me.css">
+    <script>
+        $(window).on('load', function () {
+            var link = "";
+            // 遍历所有的 img 标签
+            $("img").each((i, o) => {
+                var o = $(o);
+            // 判断图片的链接是否包含 sinaimg 关键字
+            if (o.attr("src").indexOf("sinaimg") > 0) {
+                // 给这个标签加上 referrerPlicy 属性
+                o.attr("referrerpolicy", "no-referrer");
+                // 备份图片的 src
+                link = o.attr("src");
+                // 重新设置 src，让页面重新加载一次图片
+                o.attr("src", link);
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="_fragments :: menu(2)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <!--stackable可堆叠效果，适应移动端-->
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <a href="#" class="m-item item m-mobile-hide"><i class="mini home icon"></i> 首页</a>
+            <a href="#" class="active m-item item m-mobile-hide"><i class="mini idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="mini tags icon"></i>标签</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="mini clone icon"></i>归档</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="mini info icon"></i>关于我</a>
+            <div class="right m-item item m-mobile-hide">
+                <div class="ui icon inverted transparent input">
+                    <input type="text" placeholder="搜索">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!--中间内容-->
+<div class="m-padded-tb-big m-container-small">
+    <div class="ui container">
+        <!--header-->
+        <div class="ui top attached segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="ui teal header">分类</h3>
+                </div>
+                <div class="right aligned column">
+                    共<h3 class="ui orange header m-inline-block m-text-thin" th:text="${#arrays.length(types)}">5</h3>个
+                </div>
+            </div>
+        </div>
+
+        <div class="ui attached segment m-padded-tb-large">
+            <div class="ui labeled button m-margin-top-tiny" th:each="type : ${types}">
+                <a href="#" th:href="@{/types/{id}(id=${type.id})}" class="ui basic button"
+                   th:classappend="${type.id==activeTypeid} ? 'teal' " th:text="${type.name}">思考感悟</a>
+                <div class="ui basic left pointing label" th:classappend="${type.id==activeTypeid} ? 'teal' "
+                     th:text="${#arrays.length(type.blogs)}">10
+                </div>
+            </div>
+        </div>
+        <!--查询正文-->
+        <div class="ui top attached teal segment">
+            <div class="ui attached segment m-padded-tb-large" th:each="blog : ${page.content}">
+                <div class="ui padded vertical segment">
+                    <!--mobile reversed 移动端翻转上下结构-->
+                    <div class="ui middle aligned mobile reversed stackable grid">
+                        <div class="ui eleven wide column">
+                            <h3 class="header"><a class="m-black" href="#" th:href="@{/blog/{id}(id=${blog.id})}"
+                                                  th:text="${blog.title}">你会写blog吗？</a></h3>
+                            <p class="m-text" th:text="|${#strings.abbreviate(blog.content,120)}...|">
+                                现在关键是长尾词搜索时代，只要你的博客内容足够精良，仍然可以获得足够多的流量。
+                                而且，一个个人博客，怎么可能会成为各大自媒体平台的竞争对手？
+                                在属于自己的角落里好好发展，让然可以生存的很茁壮。</p>
+                            <div class="ui stackable grid">
+                                <div class="eleven wide column">
+                                    <div class="ui mini horizontal link list">
+                                        <div class="item">
+                                            <img src="http://temp.im/100x100" th:src="@{${blog.user.avatar}}" alt=""
+                                                 class="ui avatar image">
+                                            <div class="content"><a th:text="${blog.user.nickname}"
+                                                                    class="header">名字</a></div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="calendar icon"></i><span
+                                                th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2019-06-01</span>
+                                        </div>
+                                        <div class="item">
+                                            <i class="eye icon"></i><span th:text="${blog.views}">3696</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right aligned five wide column">
+                                    <a href="#" class="ui teal basic label m-padded-tiny m-text-thin" target="_blank"
+                                       th:text="${blog.type.name}">认知升级</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" class="ui basic teal pointing label m-padded-mini m-text-thin" th:each="tag : ${blog.tags}" th:text="${tag.name}"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui five wide column">
+                            <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                                <img src="http://temp.im/800x450" th:src="@{${blog.firstPicture}}"
+                                     class="ui rounded image">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--翻页-->
+        <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <a href="#" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}"
+                       class="ui mini basic button">上一页</a>
+                </div>
+                <div class="right aligned column">
+                    <a href="#" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}"
+                       class="ui mini teal basic button">下一页</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<!--底部-->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+
+</footer>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.js"></script>
+<script>
+    $('.menu.toggle').click(function () {
+        //按钮导航隐藏显示
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+</script>
+</body>
+</html>

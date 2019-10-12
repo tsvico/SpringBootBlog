@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客管理</title>
+    <link href="https://cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/me.css">
+    <link rel="stylesheet" href="/static/lib/alert/SemanticAlert.css">
+    <style>
+        input{
+            width: auto !important;
+        }
+    </style>
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="admin/_fragments :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">管理后台</h2>
+            <a href="#" class="active m-item item m-mobile-hide"><i class="mini home icon"></i>博客</a>
+            <a href="#" class=" m-item item m-mobile-hide"><i class="mini idea icon"></i>分类</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="mini tags icon"></i>标签</a>
+            <div class="right m-item m-mobile-hide menu">
+                <div class="ui dropdown  item">
+                    <div class="text">
+                        <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+                        tsvico
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="/admin/logout" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <form class="ui form">
+            <input id="uuname" name="uuname" type="hidden" th:value="${session.user.username}">
+            <div class="fields">
+                <div class="ui labeled input m-margin-top">
+                    <div class="ui label">
+                        昵&nbsp;&nbsp;称
+                    </div>
+                    <!--/*${user.name}}*/-->
+                    <input type="text" id="nickname" name="nickname" th:value="${session.user.nickname}"
+                           placeholder="昵称">
+                </div>
+                <div class="ui labeled input m-margin-top">
+                    <div class="ui label">
+                        用户名
+                    </div>
+                    <!--/*${user.email}}*/-->
+                    <input type="text" id="username" th:value="${session.user.username}" name="username"
+                           placeholder="用户名">
+                </div>
+            </div>
+
+            <div class="ui accordion field">
+                <div class="title"><i class="icon dropdown"></i> 修改密码</div>
+                <div class="content field">
+                    <div class="ui input transition hidden">
+                        <input id="password" name="password" placeholder="初始密码" type="password">
+                    </div>
+                    <br>
+                    <div class="ui input transition hidden m-margin-top">
+                        <input id="password1" placeholder="新密码" type="password">
+                    </div>
+                    <div class="ui input transition hidden m-margin-top">
+                        <input id="password2" name="password2" placeholder="新密码" type="password">
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="ui labeled input m-margin-top">
+                <div class="ui label">
+                    邮箱
+                </div>
+                <!--/*${user.email}}*/-->
+                <input type="text" id="email" name="email" th:value="${session.user.email}" placeholder="邮箱">
+            </div>
+            <div class="ui labeled input m-margin-top">
+                <div class="ui label">
+                    头像地址
+                </div>
+                <!--/*${user.email}}*/-->
+                <input type="text" id="avatar" name="avatar" th:value="${session.user.avatar}" placeholder="头像">
+            </div>
+            <br>
+            <div class="ui error message"></div>
+        </form>
+
+        <button type="button" id="submit-btn" class="ui teal button m-margin-top">更新数据</button>
+    </div>
+
+    <br>
+
+</div>
+<br> <br><br>
+<!--底部footer-->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+</footer>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="/static/lib/alert/SemanticAlert.js"></script>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+
+
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+    $('.ui.accordion').accordion();
+    $('#submit-btn').click(function () {
+        $(".ui.form").submit();
+    });
+    // [*] 验证数据，返回 false 校验不通过
+    $.fn.form.settings.rules.pwdtopwd = function (password) {
+        var valid = true;
+        if ($('#password').val().length > 0) {
+            if ($('#password1').val() !== $('#password2').val()) {
+                valid = false;
+            }
+        }
+        return valid;
+    };
+    $.fn.form.settings.rules.hasUnempty = function (password) {
+        var valid = true;
+        if ($('#password1').val().length > 0 || $('#password2').val().length > 0){
+            if ($('#password').val().length === 0) {
+                valid = false;
+            }
+        }
+        if ($('#password').val().length > 0){
+            if ($('#password1').val().length === 0 || $('#password2').val().length === 0) {
+                valid = false;
+            }
+        }
+        return valid;
+    };
+    $('.ui.form').form({
+        //on: 'blur',    // 当失去焦点时就进行验证
+        fields: {
+            nickname: {
+                identifier: 'nickname',
+                rules: [{
+                    type: 'empty',
+                    prompt: ' 请输入昵称'
+                }]
+            },
+            username: {
+                identifier: 'username',
+                rules: [{
+                    type: 'empty',
+                    prompt: ' 请输入用户名'
+                }]
+            },
+            avatar: {
+                identifier: 'avatar',
+                rules: [{
+                    type: 'empty',
+                    prompt: ' 头像不能为空'
+                }]
+            },
+            password: {
+                identifier: 'password2',
+                rules: [{
+                    type: 'hasUnempty',
+                    prompt: ' 请输入修改密码'
+                }, {
+                    type: 'pwdtopwd',
+                    prompt: ' 两次密码不相同'
+                }]
+            },
+            email: {
+                identifier: 'email',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: " 邮箱不能为空"
+                    },
+                    {
+                        type: 'email',
+                        prompt: ' 邮箱不符合规则'
+                    }]
+            }
+        },
+        onSuccess: function (event, fields) {
+            // [*] 表单验证通过后调用 onSuccess 函数
+            // fields 中保存了所有的表单数据，例如 {name: "Alice", color: "rgb(255, 255, 255)"}
+            event.preventDefault(); // [*] 如果需要使用 Ajax 提交时，防止表单自动提交
+            if (fields.password.length>0)
+                fields.password = md5(fields.password);
+            if (fields.password2.length>0)
+                fields.password2 = md5(fields.password2);
+            console.log(fields);
+            $('.ui.button').addClass('disabled');//防止重复点击
+            $.ajax({
+                url: 'userUpdate',
+                type: 'post',
+                dataType: 'json',
+                data: fields,
+                success:function(res){
+                    console.log(res);
+                    if (res.code===200){
+                        showmessage("更新成功","成功将个人资料更新");
+                        $('.ui .avatar').attr('src',$('#avatar').val());
+                        $('#menu-nickname').html($('#nickname').val());
+                        document.location.href="logout";
+                    }else{
+                        showmessage("更新失败",res.message);
+                        $('.ui.button').removeClass('disabled');
+                    }
+                },
+                error:function(xhr,state,errorThrown){
+                    showmessage("发现错误","即将跳转到首页");
+                    setTimeout('window.location.href= "/admin"',3000);
+                    //window.location.href= "/admin";
+                    console.log(xhr);
+                    console.log(state);
+                }
+
+            })
+        }
+    });
+    function showmessage(title,message) {
+        $.uiAlert({
+            textHead: title,//标题
+            text: message,//详细内容
+            textcolor: '#000',//文字颜色
+            type: 'success',//提示类型：'success','info','waring','danger'
+            position: 'center',//位置：'top-left','top-center','top-right','bottom-left','bottom-center','bottom-right','center'
+            icon: '',//提示左边的图标
+            time: 2,//几秒后消失
+            permanent: false,//是否永远不消失
+            onClosed:function(){//结束的回调
+            }
+        })
+    }
+</script>
+</body>
+</html>
