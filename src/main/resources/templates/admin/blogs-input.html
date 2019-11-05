@@ -249,8 +249,11 @@
         $('#htmlcode').text(contentEditor.getHTML());
     }
 
+    /**
+     * HTML转图片
+     * * */
     function htmlTopng() {
-        if ($('#thHtml1').val() != "") {
+        if ($('#thHtml1').val() !== "") {
             var html = $('#thHtml1').val();
             $('.thHtml2').html(html);
             $(".thHtml2").toggle();
@@ -341,6 +344,7 @@
         }
     });
 
+    //前端打开文件文件名显示在标题，内容使用setMarkdown赋值
     function openFile(event) {
         if (typeof FileReader == 'undefined') {
             alert("你的浏览器不支持FileReader接口！");

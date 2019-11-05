@@ -55,7 +55,7 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-        -->
+       -->
         <!-- kaptcha验证码 -->
         <dependency>
             <groupId>com.github.penggle</groupId>

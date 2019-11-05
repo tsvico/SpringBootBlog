@@ -39,9 +39,7 @@ public class CodeUtil {
         String verifyCodeExpected = (String) request.getSession().getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
         //获取用户输入的验证码
         String verifyCodeActual = CodeUtil.getString(request, "verifyCodeActual"); //前端传过来的
-        if(verifyCodeActual == null ||!verifyCodeActual.equals(verifyCodeExpected)) {
-            return false;
-        }
-        return true;
+        //不区分大小写
+        return verifyCodeActual != null && verifyCodeActual.equalsIgnoreCase(verifyCodeExpected);
     }
 }

@@ -20,10 +20,10 @@ public class KaptchaConfig {
 
         DefaultKaptcha captchaProducer = new DefaultKaptcha();
         Properties properties = new Properties();
-        String s = "0123456789abcdefghijklmnopqrstuvwxyz@#%&ABCDEFGHMNQRSTYZ";
+        String s = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHMNQRSTYZ";
         properties.setProperty("kaptcha.border", "no"); //是否有边框，默认为yes，可选yes、no
         properties.setProperty("kaptcha.border.color", "105,179,90");
-        properties.setProperty("kaptcha.textproducer.font.color", "blue");
+        properties.setProperty("kaptcha.textproducer.font.color", "black");
         properties.setProperty("kaptcha.textproducer.char.string", s);
         //properties.setProperty("kaptcha.textproducer.char.string", str.toString());
         properties.setProperty("kaptcha.image.width", "110");
