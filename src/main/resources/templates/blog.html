@@ -6,13 +6,13 @@
     <title>博客详情</title>
     <meta name="referrer" content="no-referrer"/>
     <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css">
-    <link rel="stylesheet" href="../static/css/typo.css">
-    <link rel="stylesheet" href="../static/css/animate.css">
-    <link rel="stylesheet" href="../static/lib/prism/prism.css">
-    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css">
-    <link rel="stylesheet" href="../static/css/me.css">
-    <link rel="stylesheet" href="/static/lib/editormd/css/editormd.min.css">
-    <link rel="stylesheet" href="/static/lib/alert/SemanticAlert.css">
+    <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/static/css/typo.css}">
+    <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/static/css/animate.css}">
+    <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/static/lib/prism/prism.css}">
+    <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/static/lib/tocbot/tocbot.css}">
+    <link rel="stylesheet" href="../static/css/me.css" th:href="@{/static/css/me.css}">
+    <link rel="stylesheet" href="/static/lib/editormd/css/editormd.min.css" th:href="@{/static/lib/editormd/css/editormd.min.css}">
+    <link rel="stylesheet" href="/static/lib/alert/SemanticAlert.css" th:href="@{/static/lib/alert/SemanticAlert.css}">
 
 </head>
 <body>
@@ -343,13 +343,13 @@
     $('.menu.toggle').click(function () {
         //按钮导航隐藏显示
         $('.m-item').toggleClass('m-mobile-hide');
-    })
+    });
 
     $('#payButton').popup({
         popup: $('.payImg.popup'),
         on: 'click',
         position: 'bottom center'
-    })
+    });
     tocbot.init({
         //这是生成列表
         // Where to render the table of contents.
@@ -500,7 +500,7 @@
                 console.log(xhr);
                 console.log(state);
             }
-        })
+        });
         console.log("commentId" + id)
     }
 
