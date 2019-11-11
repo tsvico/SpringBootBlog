@@ -19,6 +19,11 @@ import java.util.List;
  */
 public interface BlogRepository extends JpaRepository<Blog,Long>, JpaSpecificationExecutor<Blog> {
 
+    /**
+     * 查询顶部的数据
+     * @param pageable
+     * @return
+     */
     @Query("select b from Blog b where b.recommend = true")
     List<Blog> findTop(Pageable pageable);
 

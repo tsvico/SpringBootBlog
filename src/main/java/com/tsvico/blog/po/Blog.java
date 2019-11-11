@@ -10,24 +10,36 @@ import java.util.List;
  * @email tsxygwj@gmail.com
  * @time 2019/8/13 12:21
  * 功能 博客实体类 从对象出发来建模，自定生成对应数据库
+ *  //对应数据库直接生成的能力 JPA中注解
+ *  //更改默认数据库生成的名字
  */
-@Entity  //对应数据库直接生成的能力 JPA中注解
-@Table(name = "t_blog") //更改默认数据库生成的名字
+@Entity
+@Table(name = "t_blog")
 public class Blog {
-
-    @Id  //声明主键
+    /**声明主键*/
+    @Id
     @GeneratedValue
     private Long id;
     private String title;
-    @Basic(fetch = FetchType.LAZY) //懒加载
-    @Lob  //声明长类型，因为默认给的是varchar(255)
+    @Basic(fetch = FetchType.LAZY) //   懒加载
+    /**
+     * 声明长类型，因为默认给的是varchar(255)
+     */
+    @Lob
     private String content;
-    @Lob  //声明长类型，因为默认给的是varchar(255)
+    /**
+     *  声明长类型，因为默认给的是varchar(255)
+     */
+    @Lob
     private String firstPicture;
-    private String flag; //转载、原创
-    private Integer views;//浏览次数
-    private boolean appreciation;//赞赏
-    private boolean shareStatment;//转载开启
+    /**转载、原创*/
+    private String flag;
+    /**浏览次数*/
+    private Integer views;
+    /**赞赏*/
+    private boolean appreciation;
+    /**转载开启*/
+    private boolean shareStatment;
     private boolean commentable; //评论开启
     private boolean published; //是否发布 //1 发布 0 保存
     private boolean recommend;//是否推荐

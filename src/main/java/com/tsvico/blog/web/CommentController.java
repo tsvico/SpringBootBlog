@@ -6,6 +6,7 @@ import com.tsvico.blog.po.JsonDate;
 import com.tsvico.blog.po.User;
 import com.tsvico.blog.service.BlogService;
 import com.tsvico.blog.service.CommentService;
+import com.tsvico.blog.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,26 +33,30 @@ public class CommentController {
     @GetMapping("/comments/{blogId}")
     public String comments(@PathVariable String blogId, Model model,
                            HttpSession session){
-        if (session.getAttribute("user")!=null){
-            model.addAttribute("login",true); //把登录状态返回前端
+        if (session.getAttribute(Constants.config.UserSession.getValue())!=null){
+            //把登录状态返回前端
+            model.addAttribute("login",true);
         }else {
             model.addAttribute("login",false);
         }
-        Long new_id;
+        Long newId;
         try {
-            new_id = Long.parseLong(blogId);
+            newId = Long.parseLong(blogId);
         }catch (Exception e){
             throw new Controller404();
         }
-        model.addAttribute("comments",commentService.listCommentByBlogId(new_id));
+        model.addAttribute("comments",commentService.listCommentByBlogId(newId));
         return "blog :: commentList";
     }
 
-    @ResponseBody  //在 Controller 类上面用 @RestController 定义或者在方法上面用 @ResponseBody 定义，表明是在 Body 区域输出数据 表明是返回JSON
+    @ResponseBody
     @RequestMapping("/comments/{commentId}/delete")
+    /**
+     * //在 Controller 类上面用 @RestController 定义或者在方法上面用 @ResponseBody 定义，表明是在 Body 区域输出数据 表明是返回JSON
+     */
     public JsonDate delete(@PathVariable Long commentId, HttpSession session){
         JsonDate json = new JsonDate();
-        if (session.getAttribute("user")==null){
+        if (session.getAttribute(Constants.config.UserSession.getValue())==null){
             json.setCode(0);
             json.setMessage("权限异常");
             //return json;

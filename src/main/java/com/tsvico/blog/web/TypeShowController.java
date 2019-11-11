@@ -20,9 +20,9 @@ import java.util.List;
  * @author tsvico
  * @email tsxygwj@gmail.com
  * @time 2019/8/22 22:01
- * 功能
+ * 功能//定义控制器
  */
-@Controller  //定义控制器
+@Controller
 public class TypeShowController {
 
     @Autowired
@@ -34,22 +34,22 @@ public class TypeShowController {
     @GetMapping("/types/{id}")
     public String types(@PageableDefault(size = 10, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
                         @PathVariable String id, Model model) {
-
-        List<Type> types = typeService.listTypeTop(300);//只要足够大，就能查全表
-        Long new_id;
+        //只要足够大，就能查全表
+        List<Type> types = typeService.listTypeTop(300);
+        Long newId;
         try {
-           new_id = Long.parseLong(id);
+           newId = Long.parseLong(id);
         }catch (Exception e){
             throw new Controller404();
         }
-        if (new_id == -1) {
-            new_id= types.get(0).getId();
+        if (newId == -1) {
+            newId= types.get(0).getId();
         }
         BlogQuery blogQuery = new BlogQuery();
-        blogQuery.setTypeId(new_id);
+        blogQuery.setTypeId(newId);
         model.addAttribute("types", types);
         model.addAttribute("page", blogService.listBlog(pageable, blogQuery));
-        model.addAttribute("activeTypeid", new_id);
+        model.addAttribute("activeTypeid", newId);
         return "types";
     }
 }

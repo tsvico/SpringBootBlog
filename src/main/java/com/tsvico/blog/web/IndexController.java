@@ -18,9 +18,8 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- *  By. tsvico
+ * @author GWJ
  */
-//拦截器
 @Controller
 public class IndexController {
 
@@ -45,8 +44,9 @@ public class IndexController {
     @GetMapping("/search")
     public String search(@PageableDefault(size = 10,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                          @RequestParam String query, Model model){
-        if (query==null)
+        if (query==null) {
             throw new Controller404();
+        }
         model.addAttribute("page",blogService.listBlog("%"+query+"%",pageable));
         model.addAttribute("query",query);
         return "search";
@@ -56,7 +56,8 @@ public class IndexController {
     public String blog(@PathVariable String id, Model model
             , HttpSession session, HttpServletResponse response){
         if (session.getAttribute("user")!=null){
-            model.addAttribute("login",true); //把登录状态返回前端
+            //把登录状态返回前端
+            model.addAttribute("login",true);
         }else {
             model.addAttribute("login",false);
         }
@@ -64,9 +65,7 @@ public class IndexController {
             Long l = Long.parseLong(id);
             Blog blog = blogService.getBlog(l);
             int view = blogService.Views(l);
-            //System.out.println("浏览量"+view);
             if (blog!=null){
-                //blog.setViews(view);
                 model.addAttribute("blog",blog);
             }
             else{

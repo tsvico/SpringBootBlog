@@ -4,7 +4,6 @@ import com.tsvico.blog.Controller404;
 import com.tsvico.blog.po.Tag;
 import com.tsvico.blog.service.BlogService;
 import com.tsvico.blog.service.TagService;
-import com.tsvico.blog.vo.BlogQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -34,18 +33,18 @@ public class TagShowContoller {
     public String tag(@PageableDefault(size = 10,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                       @PathVariable("id") String id, Model model){
         List<Tag> tags = tagService.listTop(300);
-        Long new_id;
+        Long newId;
         try {
-            new_id = Long.parseLong(id);
+            newId = Long.parseLong(id);
         }catch (Exception e){
             throw new Controller404();
         }
-        if (new_id==-1){
-            new_id = tags.get(0).getId();
+        if (newId==-1){
+            newId = tags.get(0).getId();
         }
         model.addAttribute("tags",tags);
-        model.addAttribute("page",blogService.listBlog(new_id,pageable));
-        model.addAttribute("activeTagid", new_id);
+        model.addAttribute("page",blogService.listBlog(newId,pageable));
+        model.addAttribute("activeTagid", newId);
         return "tags";
     }
 }
